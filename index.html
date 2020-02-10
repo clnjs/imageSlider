@@ -1,0 +1,172 @@
+<DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width , initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Image Slider </title>
+</head>
+
+<body>
+   <div class="carousel-container">
+      <div class="carousel-slide" id="carousel-slide">
+        <img src="./img005.jpg" alt="" id="lastClone">
+        <img src="./img001.jpg"  alt="">
+        <img src="./img002.jpg" alt="">
+        <img src="./img003.jpg" alt="">
+        <img src="./img004.jpg" alt="">
+        <img src="./img005.jpg" alt="">
+        <img src="./img001.jpg"  alt="" id="fristClone">
+      </div>
+   </div>
+
+  <button id="prevBtn" >previous</button>
+  <button id="nextBtn" >next</button>
+
+
+
+<script>
+
+
+domCreator={
+   createTag:function(myArray){  //tagName,varName,clsName,Inner,appEnd
+                  console.log("createTag" ,myArray);
+                  window[myArray[2]] = document.createElement(myArray[0]);
+                  window[myArray[2]].className= myArray[3];
+                  window[myArray[2]].innerHTML= myArray[4];
+                  window[myArray[1]].appendChild(window[myArray[2]]);
+                  //return appEnd;
+                  for(var i=5;i<myArray.length;i++){
+                    //console.log(myArray[i]);
+                    var att=myArray[i].split("=");
+                    window[myArray[2]].setAttribute(att[0],att[1]);
+                                                }
+
+          },
+    createTagf:function(myArray){  //tagName,varName,clsName,Inner,appEnd
+                   window[myArray[2]] = document.createElement(myArray[0]);
+                   window[myArray[2]].className= myArray[3];
+                   window[myArray[2]].innerHTML= myArray[4];
+                   //window[myArray[1]].appendChild(window[myArray[2]]);
+                   //return appEnd;
+                   for(var i=5;i<myArray.length;i++){
+                     var att=myArray[i].split("=");
+                     window[myArray[2]].setAttribute(att[0],att[1]);
+                                                 }
+
+           }
+
+};
+
+
+
+  var makeDom = function(domObj,escape){
+    if(escape=== undefined){
+        Object.keys(domObj).forEach(function(item){
+          domCreator.createTag(domObj[item]);
+        });
+
+    }else{
+      Object.keys(domObj).forEach(function(item){
+        if(escape.indexOf(item)!=-1){return;}
+        domCreator.createTag(domObj[item]);
+      });
+
+    }
+  }
+
+
+
+var carouselSlide = document.querySelector(".carousel-slide");
+const carouselImages = document.querySelectorAll(".carousel-slide img");
+
+function slideShow(){
+   this.imgeCollection = ["img001.jpg","img002.jpg","img003.jpg","img004.jpg","img005.jpg",];
+   this.slideCollection = [];
+   this.imgListLength;
+   this.counter = 1;
+   this.imgDom = {image:["img","carouselSlide","imgTag","nice",""]};
+
+   this.getLastImage = function(){
+     return this.imgeCollection[this.imgListLength-1];
+   };
+   this.getFristImage = function(){
+     return this.imgeCollection[0];
+   };
+   this.mkSlideCollection = function(){
+      this.slideCollection.push(this.getLastImage());
+      this.imgeCollection.forEach( (item,index)=>{this.slideCollection.push(item);} );
+      this.slideCollection.push(this.getFristImage());
+   };
+   this.mkDom = function(){
+     this.slideCollection.forEach((item,index)=>{
+        this.imgDom.image[5]="src="+item;
+        makeDom(this.imgDom);
+     });
+
+   };
+   this.main = function(){
+      // set image list length
+      this.imgListLength = this.imgeCollection.length;
+      // make image collection
+      this.mkSlideCollection();
+
+      // create dom collenction
+      this.mkDom();
+
+   };
+}
+
+let mainSlide = new slideShow();
+mainSlide.main();
+console.log(mainSlide.slideCollection);
+
+// Button
+const prevBtn = document.querySelector("#prevBtn");
+const nextBtn = document.querySelector("#nextBtn");
+
+// Counter
+let counter = 1;
+const size = carouselImages[0].clientWidth;
+carouselSlide.style.transform = 'translateX('+(-size*counter)+'px)';
+
+
+// button Listeners
+nextBtn.addEventListener('click',()=>{
+   if(counter >= (carouselImages.length - 1) ) return;
+   carouselSlide.style.transition = "transform 0.4s ease-in-out";
+   counter++;
+   carouselSlide.style.transform = 'translateX('+(-size*counter)+'px)';
+},false);
+
+prevBtn.addEventListener('click',()=>{
+   if(counter <= 0 ) return;
+   carouselSlide.style.transition = "transform 0.4s ease-in-out";
+   counter--;
+   carouselSlide.style.transform = 'translateX('+(-size*counter)+'px)';
+},false);
+
+carouselSlide.addEventListener('transitionend',()=>{
+   if(carouselImages[counter].id === 'lastClone'){
+      carouselSlide.style.transition = "none";
+      counter = carouselImages.length - 2;
+      carouselSlide.style.transform = 'translateX('+(-size*counter)+'px)';
+   }
+   if(carouselImages[counter].id === 'fristClone'){
+      carouselSlide.style.transition = "none";
+      counter = carouselImages.length - counter;
+      carouselSlide.style.transform = 'translateX('+(-size*counter)+'px)';
+   }
+},false);
+
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
