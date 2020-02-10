@@ -29,98 +29,8 @@
 <script>
 
 
-domCreator={
-   createTag:function(myArray){  //tagName,varName,clsName,Inner,appEnd
-                  console.log("createTag" ,myArray);
-                  window[myArray[2]] = document.createElement(myArray[0]);
-                  window[myArray[2]].className= myArray[3];
-                  window[myArray[2]].innerHTML= myArray[4];
-                  window[myArray[1]].appendChild(window[myArray[2]]);
-                  //return appEnd;
-                  for(var i=5;i<myArray.length;i++){
-                    //console.log(myArray[i]);
-                    var att=myArray[i].split("=");
-                    window[myArray[2]].setAttribute(att[0],att[1]);
-                                                }
-
-          },
-    createTagf:function(myArray){  //tagName,varName,clsName,Inner,appEnd
-                   window[myArray[2]] = document.createElement(myArray[0]);
-                   window[myArray[2]].className= myArray[3];
-                   window[myArray[2]].innerHTML= myArray[4];
-                   //window[myArray[1]].appendChild(window[myArray[2]]);
-                   //return appEnd;
-                   for(var i=5;i<myArray.length;i++){
-                     var att=myArray[i].split("=");
-                     window[myArray[2]].setAttribute(att[0],att[1]);
-                                                 }
-
-           }
-
-};
-
-
-
-  var makeDom = function(domObj,escape){
-    if(escape=== undefined){
-        Object.keys(domObj).forEach(function(item){
-          domCreator.createTag(domObj[item]);
-        });
-
-    }else{
-      Object.keys(domObj).forEach(function(item){
-        if(escape.indexOf(item)!=-1){return;}
-        domCreator.createTag(domObj[item]);
-      });
-
-    }
-  }
-
-
-
 var carouselSlide = document.querySelector(".carousel-slide");
 const carouselImages = document.querySelectorAll(".carousel-slide img");
-
-function slideShow(){
-   this.imgeCollection = ["img001.jpg","img002.jpg","img003.jpg","img004.jpg","img005.jpg",];
-   this.slideCollection = [];
-   this.imgListLength;
-   this.counter = 1;
-   this.imgDom = {image:["img","carouselSlide","imgTag","nice",""]};
-
-   this.getLastImage = function(){
-     return this.imgeCollection[this.imgListLength-1];
-   };
-   this.getFristImage = function(){
-     return this.imgeCollection[0];
-   };
-   this.mkSlideCollection = function(){
-      this.slideCollection.push(this.getLastImage());
-      this.imgeCollection.forEach( (item,index)=>{this.slideCollection.push(item);} );
-      this.slideCollection.push(this.getFristImage());
-   };
-   this.mkDom = function(){
-     this.slideCollection.forEach((item,index)=>{
-        this.imgDom.image[5]="src="+item;
-        makeDom(this.imgDom);
-     });
-
-   };
-   this.main = function(){
-      // set image list length
-      this.imgListLength = this.imgeCollection.length;
-      // make image collection
-      this.mkSlideCollection();
-
-      // create dom collenction
-      this.mkDom();
-
-   };
-}
-
-let mainSlide = new slideShow();
-mainSlide.main();
-console.log(mainSlide.slideCollection);
 
 // Button
 const prevBtn = document.querySelector("#prevBtn");
@@ -161,10 +71,7 @@ carouselSlide.addEventListener('transitionend',()=>{
 },false);
 
 
-
-
 </script>
-
 
 
 </body>
